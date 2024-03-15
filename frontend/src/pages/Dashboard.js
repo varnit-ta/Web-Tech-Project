@@ -54,7 +54,7 @@ const Dashboard = () => {
                 </p>
             </div>
 
-            <h2>Upcoming</h2>
+            <h2>Today</h2>
 
             <div className="dashboard-workouts">
                 {

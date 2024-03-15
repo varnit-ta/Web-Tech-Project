@@ -1,0 +1,19 @@
+.navbar{
+    padding: 10px;
+    border: 2px solid var(--primary);
+    border-radius: 0.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px
+}
+.navbar button, .active{
+    border: 0px;
+    padding: 10px;
+    transition: 0.2s ease-in-out;
+}
+.navbar .active{
+    background-color: var(--primary);
+    color: white;
+    border-radius: 0.25em;
+}

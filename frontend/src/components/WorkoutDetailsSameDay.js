@@ -1,39 +1,36 @@
 import { useAuthContext } from '../hooks/useAuthContext';
-import './styles/WorkoutDetails.css'
+import { useState, useEffect } from 'react';
+import './styles/WorkoutDetails.css';
 
 const WorkoutDetails = ({ workouts }) => {
   const { user } = useAuthContext();
+  const todayDate = new Date().toLocaleDateString();
+
+  const [checked, setChecked] = useState(false);
+
+  useEffect(() => {
+    if (workouts.completed_days.includes(todayDate)) {
+      setChecked(true);
+    } else {
+      setChecked(false);
+    }
+  }, [workouts, todayDate]);
 
   const handleSubmit = async (e) => {
-    const date = new Date().toLocaleDateString();
-
-    if (e.target.checked){
-      const response = await fetch(`/api/workouts/addDate/${workouts._id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ date }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const json = await response.json();
-      console.log(json);
-    } 
-
-    if (e.target.checked === false){
-      const response = await fetch(`/api/workouts/deleteDate/${workouts._id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ date }),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
-      const json = await response.json();
-      console.log(json);
-    }
+    const isChecked = e.target.checked;
+    setChecked(isChecked);
+    const endpoint = isChecked ? `/api/workouts/addDate/${workouts._id}` : `/api/workouts/deleteDate/${workouts._id}`;
+    const response = await fetch(endpoint, {
+      method: "PATCH",
+      body: JSON.stringify({ date: todayDate }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token}`,
+      },
+    });
+    const json = await response.json();
+    console.log(json);
   }
-
 
   return (
     <div className="workout-details">
@@ -43,11 +40,10 @@ const WorkoutDetails = ({ workouts }) => {
       </div>
 
       <div className='checkbox'>
-        <input type="checkbox" value={workouts.title} onChange={handleSubmit}/>
+        <input type="checkbox" value={workouts.title} onChange={handleSubmit} checked={checked} />
       </div>
-
     </div>
   )
 }
 
-export default WorkoutDetails
+export default WorkoutDetails;
