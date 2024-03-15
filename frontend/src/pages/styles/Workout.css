@@ -1,0 +1,10 @@
+.workouts-page {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.workout-form {
+    width: 40%;
+    max-width: 400px;
+}
