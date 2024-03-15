@@ -163,6 +163,38 @@ const deleteDate = async (req, res) => {
   }
 };
 
+const deleteDay = async (req, res) => {
+  const { id } = req.params;
+  const { day } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such workout' });
+  }
+
+  try {
+    const workout = await Workout.findById(id);
+    if (!workout) {
+      return res.status(404).json({ error: 'Workout not found' });
+    }
+
+    const index = workout.days_planned.indexOf(day);
+
+    if (index !== -1) {
+      workout.days_planned.splice(index, 1);
+    } else {
+      return res.status(404).json({ error: 'Day not found in planned days' });
+    }
+
+    await workout.save();
+
+    res.status(200).json({ message: 'Day deleted successfully', workout });
+  }
+  catch (error) {
+    console.error('Error deleting day from workout:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+}
+
 
 
 module.exports = {
@@ -172,5 +204,6 @@ module.exports = {
   deleteWorkout,
   updateWorkout,
   addDates,
-  deleteDate
+  deleteDate,
+  deleteDay
 }

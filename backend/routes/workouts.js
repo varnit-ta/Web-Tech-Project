@@ -6,7 +6,8 @@ const {
   deleteWorkout,
   updateWorkout,
   addDates,
-  deleteDate
+  deleteDate,
+  deleteDay
 } = require('../controllers/workoutController')
 
 const requireAuth = require('../middleware/requireAuth')
@@ -32,6 +33,7 @@ router.delete('/:id', deleteWorkout)
 router.patch('/:id', updateWorkout)
 router.patch('/addDate/:id', addDates)
 router.patch('/deleteDate/:id', deleteDate)
+router.patch('/deleteDay/:id', deleteDay)
 
 
 module.exports = router
