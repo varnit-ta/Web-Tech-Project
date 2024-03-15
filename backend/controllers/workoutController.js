@@ -181,19 +181,24 @@ const deleteDay = async (req, res) => {
 
     if (index !== -1) {
       workout.days_planned.splice(index, 1);
+      if (workout.days_planned.length === 0) {
+        await workout.remove();
+        return res.status(200).json({ message: 'Workout deleted successfully' });
+      }
     } else {
       return res.status(404).json({ error: 'Day not found in planned days' });
     }
 
     await workout.save();
 
-    res.status(200).json({ message: 'Day deleted successfully', workout });
+    res.status(200).json({ message: 'Day deleted successfully ' + day, workout });
   }
   catch (error) {
     console.error('Error deleting day from workout:', error);
     res.status(500).json({ error: 'Server error' });
   }
 }
+
 
 
 

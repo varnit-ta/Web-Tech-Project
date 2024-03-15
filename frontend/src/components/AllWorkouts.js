@@ -13,21 +13,25 @@ const WorkoutBox = ({ workout, dispatch, selectedDay }) => {
             return
         }
 
-        const response = await fetch('/api/workouts//deleteDay/' + workout._id, {
+        const response = await fetch('/api/workouts/deleteDay/' + workout._id, {
             method: 'PATCH',
-            body: JSON.stringify({day: selectedDay}),
+            body: JSON.stringify({ day: selectedDay }), // Serialize body to JSON
             headers: {
-              'Authorization': `Bearer ${user.token}`
+              'Authorization': `Bearer ${user.token}`,
+              'Content-Type': 'application/json',
             }
           })
 
           const json = await response.json()
       
           if (response.ok) {
-            dispatch({type: 'DELETE_WORKOUT', payload: json})
+            dispatch({type: 'MODIFY_WORKOUT', payload: json})
+          }
+          if (!response.ok){
+            console.log(json.error)
           }
 
-          console.log("Deleted")
+          console.log(workout._id)
     }
 
     return (
@@ -38,6 +42,7 @@ const WorkoutBox = ({ workout, dispatch, selectedDay }) => {
                     if (workoutType.name === workout.title) {
                         return (<p className='calories'>{workoutType.caloriesBurnedPerHour} kcal</p>)
                     }
+                    return null;
                 })}
             </div>
 
@@ -99,6 +104,7 @@ const AllWorkouts = () => {
                                 />
                             );
                         }
+                        return null;
                     })
                 }
             </div>

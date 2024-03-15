@@ -64,7 +64,6 @@ const WorkoutHistory = ({ workouts }) => {
   );
 };
 
-
 const Home = () => {
   const { dispatch, workouts } = useWorkoutsContext()
   const { user } = useAuthContext()
