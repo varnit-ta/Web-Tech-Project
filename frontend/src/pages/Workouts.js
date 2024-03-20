@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext"
 import { useAuthContext } from "../hooks/useAuthContext"
 
@@ -8,6 +8,7 @@ import WorkoutForm from '../components/WorkoutForm'
 import './styles/Workouts.css'
 import workoutTypes from '../db/workoutTypes.json'
 import AllWorkouts from '../components/AllWorkouts'
+import LoadingPage from './LoadingPage'
 
 const WorkoutHistoryBox = ({ workouts, time }) => {
   return (
@@ -47,6 +48,7 @@ const WorkoutHistory = ({ workouts }) => {
           }
         })
       }
+      
       {
         workouts && workouts.map((workout, index) => {
           if (workout.completed_days.includes(yesterdayDate)) {
@@ -68,6 +70,8 @@ const Home = () => {
   const { dispatch, workouts } = useWorkoutsContext()
   const { user } = useAuthContext()
 
+  const [gotData, setGotData] = useState(false);
+
   useEffect(() => {
     const fetchWorkouts = async () => {
       const response = await fetch('/api/workouts', {
@@ -77,6 +81,7 @@ const Home = () => {
 
       if (response.ok) {
         dispatch({ type: 'SET_WORKOUTS', payload: json })
+        setGotData(true)
       }
     }
 
@@ -86,24 +91,39 @@ const Home = () => {
   }, [dispatch, user])
 
   return (
-    <div className='workouts-page'>
-      <div className="left">
-        <div className="all-workouts">
-          <h2>Workouts</h2>
-          <AllWorkouts />
-        </div>
+    <div>
+      {
+        gotData ? (
+          <div className='workouts-page' >
+            <div className="left">
+              <div className="all-workouts">
+                <h2>Workouts</h2>
+                <AllWorkouts />
+              </div>
 
-        <div className="workout-history">
-          <h2>History</h2>
-          <WorkoutHistory workouts={workouts} />
-        </div>
-      </div>
+              <div className="workout-history">
+                <h2>History</h2>
+                <WorkoutHistory workouts={workouts} />
+              </div>
+            </div>
 
 
-      <div className="right">
-        <WorkoutForm />
-      </div>
+            <div className="right">
+              <WorkoutForm />
+            </div>
+          </div >
+
+        ) : (
+
+
+          <div className="loading-screen">
+            <LoadingPage />
+          </div>
+        )
+      }
     </div>
+
+
   )
 }
 

@@ -10,17 +10,25 @@ import 'react-circular-progressbar/dist/styles.css';
 const ProgressWindow = () => {
     const { workouts } = useWorkoutsContext();
     const today = new Date().toLocaleString("en-us", { weekday: "long" });
+    const yesterdayDay = new Date(Date.now() - 86400000).toLocaleString("en-us", { weekday: "long" });
+
+
+    const yesterdayDate = new Date(Date.now() - 86400000).toLocaleDateString();
     const todayDate = new Date().toLocaleDateString();
 
     const [totalCalories, setTotalCalories] = useState(0);
     const [doneCalories, setDoneCalories] = useState(0);
-    const [percentage, setPercentage] = useState(0);
+    const [yesterdayTotalCalories, setYesterdayTotalCalories] = useState(0);
+    const [yesterdayDoneCalories, setYesterdayDoneCalories] = useState(0);
 
     const calculateToday = () => {
         if (!workouts) return;
 
         let total = 0;
         let done = 0;
+
+        let yesterdayTotal = 0;
+        let yesterdayDone = 0;
 
         workouts.forEach((workout) => {
             if (workout.days_planned.includes(today)) {
@@ -38,41 +46,79 @@ const ProgressWindow = () => {
                     }
                 })
             }
+
+            if (workout.days_planned.includes(yesterdayDay)) {
+                workoutTypes.map(workoutType => {
+                    if (workoutType.name === workout.title) {
+                        yesterdayTotal += workoutType.caloriesBurnedPerHour;
+                    }
+                })
+            }
+
+            if (workout.completed_days.includes(yesterdayDate)) {
+                workoutTypes.map(workoutType => {
+                    if (workoutType.name === workout.title) {
+                        yesterdayDone += workoutType.caloriesBurnedPerHour;
+                    }
+                })
+            }
         });
 
         setTotalCalories(total);
         setDoneCalories(done);
-        setPercentage((done / total) * 100);
+        setYesterdayTotalCalories(yesterdayTotal);
+        setYesterdayDoneCalories(yesterdayDone);
     };
 
     useEffect(() => {
         calculateToday();
+        console.log(yesterdayDate, todayDate, yesterdayTotalCalories, yesterdayDoneCalories, totalCalories, doneCalories)
     }, [workouts]);
 
     return (
         <div className="progress-window">
 
-
-            <h3>Day</h3>
             <div className='circular-progress-bar'>
-                <CircularProgressbar
-                    value={percentage}
-                    text={`${percentage}%`}
-                    strokeWidth={6}
-                    styles={buildStyles({
-                        rotation: 0.25,
-                        strokeLinecap: 'round',
-                        textSize: '16px',
-                        pathTransitionDuration: 0.5,
-                        pathColor: '#1aac83',
-                        textColor: 'black',
-                        trailColor: '#d6d6d6',
-                        backgroundColor: '#3e98c7',
-                    })}
-                />
+                <h4>Calories Burned</h4>
+                <div style={{ width: "100px", aspectRatio: 1 / 1 }}>
+                    <CircularProgressbar
+                        value={ yesterdayDoneCalories !== 0? yesterdayDoneCalories * 100 / yesterdayTotalCalories : 0}
+                        text={`${yesterdayDoneCalories !== 0? (yesterdayDoneCalories * 100 / yesterdayTotalCalories).toFixed(0) : 0}%`}
+                        styles={buildStyles({
+                            rotation: 0.25,
+                            strokeLinecap: 'round',
+                            textSize: '16px',
+                            pathTransitionDuration: 0.5,
+                            pathColor: '#1aac83',
+                            textColor: 'black',
+                            trailColor: '#d6d6d6',
+                            backgroundColor: '#3e98c7',
+                        })}
+                    />
+                </div>
+                <h4>Yesterday</h4>
             </div>
 
-
+            <div className='circular-progress-bar'>
+                <h4>Calories Burned</h4>
+                <div style={{ width: "100px", aspectRatio: 1 / 1 }}>
+                    <CircularProgressbar
+                        value={doneCalories * 100 / totalCalories}
+                        text={`${(doneCalories * 100 / totalCalories).toFixed(0)}%`}
+                        styles={buildStyles({
+                            rotation: 0.25,
+                            strokeLinecap: 'round',
+                            textSize: '16px',
+                            pathTransitionDuration: 0.5,
+                            pathColor: '#1aac83',
+                            textColor: 'black',
+                            trailColor: '#d6d6d6',
+                            backgroundColor: '#3e98c7',
+                        })}
+                    />
+                </div>
+                <h4>Today</h4>
+            </div>
 
         </div>
     );

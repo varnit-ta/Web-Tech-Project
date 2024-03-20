@@ -25,6 +25,8 @@
     display: flex;
     flex: row;
     gap: 10px;
+    margin-top: 4vh;
+    flex-wrap: wrap;
 }
 
 .dashboard-left{
