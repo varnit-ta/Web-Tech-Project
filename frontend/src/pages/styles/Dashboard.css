@@ -21,6 +21,19 @@
     color: var(--primary);
 }
 
+.dashboard-section{
+    display: flex;
+    flex: row;
+    gap: 10px;
+}
+
+.dashboard-left{
+    flex: 1;
+}
+.dashboard-right{
+    flex: 1;
+}
+
 .dashboard-workouts {
     display: flex;
     flex-direction: column;

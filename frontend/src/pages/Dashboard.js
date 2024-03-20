@@ -6,6 +6,7 @@ import WorkoutDetailsSameDay from "../components/WorkoutDetailsSameDay";
 
 import './styles/Dashboard.css'
 import LoadingPage from "./LoadingPage";
+import ProgressWindow from "../components/ProgressWindow";
 
 const Dashboard = () => {
     const { workouts, dispatch } = useWorkoutsContext();
@@ -15,6 +16,10 @@ const Dashboard = () => {
     const [gotData, setGotData] = useState(false);
     const [upcomingWorkouts, setUpcomingWorkouts] = useState(0);
     const [workoutsPlannedForToday, setWorkoutsPlannedForToday] = useState([]);
+
+    const handleClick = () => {
+        console.log(workouts)
+    }
 
     useEffect(() => {
         const fetchWorkouts = async () => {
@@ -61,19 +66,31 @@ const Dashboard = () => {
                             </p>
                         </div>
 
-                        <h2>Today</h2>
 
-                        <div className="dashboard-workouts">
-                            {
-                                workoutsPlannedForToday.length !== 0 ? (
-                                    workoutsPlannedForToday.map((workout, i) => (
-                                        <WorkoutDetailsSameDay workouts={workout} key={i} />
-                                    ))
-                                ) : (
-                                    <p>No workouts planned for today</p>
-                                )
-                            }
+                        <div className="dashboard-section">
+                            <div className="dashboard-left">
+                                <h2>My Activity</h2>
+                                <ProgressWindow gotData={gotData}/>
+                            </div>
+
+                            <div className="dashboard-right">
+                                <div className="dashboard-workouts">
+                                    <h2>Today</h2>
+                                    {
+                                        workoutsPlannedForToday.length !== 0 ? (
+                                            workoutsPlannedForToday.map((workout, i) => (
+                                                <WorkoutDetailsSameDay workouts={workout} key={i} />
+                                            ))
+                                        ) : (
+                                            <p>No workouts planned for today</p>
+                                        )
+                                    }
+                                </div>
+                            </div>
                         </div>
+
+                        
+                        <button onClick={handleClick}>click</button>
                     </div>
                 ) : (
                     <div className="loading-screen">
