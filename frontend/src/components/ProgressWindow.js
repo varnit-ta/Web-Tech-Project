@@ -103,8 +103,8 @@ const ProgressWindow = () => {
                 <h4>Calories Burned</h4>
                 <div style={{ width: "100px", aspectRatio: 1 / 1 }}>
                     <CircularProgressbar
-                        value={doneCalories * 100 / totalCalories}
-                        text={`${(doneCalories * 100 / totalCalories).toFixed(0)}%`}
+                        value={ doneCalories != 0? doneCalories * 100 / totalCalories : 0}
+                        text={`${doneCalories != 0? (doneCalories * 100 / totalCalories).toFixed(0) : 0}%`}
                         styles={buildStyles({
                             rotation: 0.25,
                             strokeLinecap: 'round',
