@@ -1,0 +1,5 @@
+.circular-progress-bar{
+    aspect-ratio: 1/1;
+    height: 10vh;
+    display: flex;
+}

@@ -17,10 +17,6 @@ const Dashboard = () => {
     const [upcomingWorkouts, setUpcomingWorkouts] = useState(0);
     const [workoutsPlannedForToday, setWorkoutsPlannedForToday] = useState([]);
 
-    const handleClick = () => {
-        console.log(workouts)
-    }
-
     useEffect(() => {
         const fetchWorkouts = async () => {
             const response = await fetch("/api/workouts", {
@@ -70,7 +66,7 @@ const Dashboard = () => {
                         <div className="dashboard-section">
                             <div className="dashboard-left">
                                 <h2>My Activity</h2>
-                                <ProgressWindow gotData={gotData}/>
+                                <ProgressWindow/>
                             </div>
 
                             <div className="dashboard-right">
@@ -89,8 +85,6 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-                        
-                        <button onClick={handleClick}>click</button>
                     </div>
                 ) : (
                     <div className="loading-screen">
