@@ -14,7 +14,7 @@ const WorkoutDetails = ({ workouts }) => {
     } else {
       setChecked(false);
     }
-  }, [workouts, todayDate]);
+  }, []);
 
   const handleSubmit = async (e) => {
     const isChecked = e.target.checked;

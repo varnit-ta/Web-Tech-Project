@@ -4,12 +4,14 @@ import { useAuthContext } from "../hooks/useAuthContext";
 
 import "./styles/WorkoutForm.css";
 import workoutTypes from '../db/workoutTypes.json'
+import loading from '../assets/loading.gif'
 
 const WorkoutForm = () => {
   const { dispatch, workouts } = useWorkoutsContext();
   const { user } = useAuthContext();
 
   const daysOption = [
+    "--Select a day--",
     "Sunday",
     "Monday",
     "Tuesday",
@@ -20,15 +22,18 @@ const WorkoutForm = () => {
   ];
 
   const [title, setTitle] = useState("");
-  const [load, setLoad] = useState("");
-  const [reps, setReps] = useState("");
+  const [load, setLoad] = useState(0);
+  const [reps, setReps] = useState(0);
   const [selectedDays, setSelectedDays] = useState([]);
   const [error, setError] = useState(null);
   const [emptyFields, setEmptyFields] = useState([]);
 
+  const [sendingData, setSendingData] = useState(false)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setSendingData(true);
+
     if (!user) {
       setError("You must be logged in");
       return;
@@ -49,17 +54,19 @@ const WorkoutForm = () => {
 
     if (!response.ok) {
       setError(json.error);
-      if (json.error !== "Workout already exists"){
+      setSendingData(false);
+      if (json.error !== "Workout already exists") {
         setEmptyFields(json.emptyFields);
       }
     }
     if (response.ok) {
       setTitle("");
-      setLoad("");
-      setReps("");
+      setLoad(0);
+      setReps(0);
       setError(null);
       setSelectedDays([]);
       setEmptyFields([]);
+      setSendingData(false);
       dispatch({ type: "CREATE_WORKOUT", payload: json });
     }
   };
@@ -81,6 +88,7 @@ const WorkoutForm = () => {
 
       <label>Exercise Title:</label>
       <select
+        typeof="text"
         onChange={(e) => setTitle(e.target.value)}
         value={title}
         className={emptyFields.includes("title") ? "error" : ""}
@@ -97,6 +105,7 @@ const WorkoutForm = () => {
 
       <label>Days:</label>
       <select
+        typeof="text"
         onChange={handleSelectChange}
         value=""
         className={emptyFields.includes("days_planned") ? "error" : ""}
@@ -132,7 +141,7 @@ const WorkoutForm = () => {
         className={emptyFields.includes("reps") ? "error" : ""}
       />
 
-      <button>Add Workout</button>
+      {sendingData ? <img src={loading} alt="loading" /> : <button>Add Workout</button>}
       {error && <div className="error">{error}</div>}
     </form>
   );

@@ -3,13 +3,16 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useWorkoutsContext } from "../hooks/useWorkoutsContext";
 import workoutGuy from "../assets/workout.png";
 import WorkoutDetailsSameDay from "../components/WorkoutDetailsSameDay";
+
 import './styles/Dashboard.css'
+import LoadingPage from "./LoadingPage";
 
 const Dashboard = () => {
     const { workouts, dispatch } = useWorkoutsContext();
     const { user } = useAuthContext();
     const today = new Date().toLocaleString("en-us", { weekday: "long" });
 
+    const [gotData, setGotData] = useState(false);
     const [upcomingWorkouts, setUpcomingWorkouts] = useState(0);
     const [workoutsPlannedForToday, setWorkoutsPlannedForToday] = useState([]);
 
@@ -21,6 +24,7 @@ const Dashboard = () => {
             const json = await response.json();
             if (response.ok) {
                 dispatch({ type: "SET_WORKOUTS", payload: json });
+                setGotData(true)
             }
         };
 
@@ -43,31 +47,42 @@ const Dashboard = () => {
     }, [workouts, today]);
 
     return (
-        <div className="dashboard">
-            <h1>Hello, {user?.user.userName ?? "Guest"} 👋</h1>
+        <div>
+            {
+                gotData ? (
+                    <div className="dashboard">
+                        <h1>Hello, {user?.user.userName ?? "Guest"} 👋</h1>
 
-            <div className="dashboard-notification">
-                <img src={workoutGuy} alt="Workout Guy" />
-                <p>
-                    You have {upcomingWorkouts} upcoming workouts.{" "}
-                    {upcomingWorkouts !== 0 ? "Keep up the good work!" : ""}
-                </p>
-            </div>
+                        <div className="dashboard-notification">
+                            <img src={workoutGuy} alt="Workout Guy" />
+                            <p>
+                                You have {upcomingWorkouts} upcoming workouts.{" "}
+                                {upcomingWorkouts !== 0 ? "Keep up the good work!" : ""}
+                            </p>
+                        </div>
 
-            <h2>Today</h2>
+                        <h2>Today</h2>
 
-            <div className="dashboard-workouts">
-                {
-                    workoutsPlannedForToday.length !== 0 ? (
-                        workoutsPlannedForToday.map((workout, i) => (
-                            <WorkoutDetailsSameDay workouts={workout} key={i}/>
-                        ))
-                    ) : (
-                        <p>No workouts planned for today</p>
-                    )
-                }
-            </div>
+                        <div className="dashboard-workouts">
+                            {
+                                workoutsPlannedForToday.length !== 0 ? (
+                                    workoutsPlannedForToday.map((workout, i) => (
+                                        <WorkoutDetailsSameDay workouts={workout} key={i} />
+                                    ))
+                                ) : (
+                                    <p>No workouts planned for today</p>
+                                )
+                            }
+                        </div>
+                    </div>
+                ) : (
+                    <div className="loading-screen">
+                        <LoadingPage />
+                    </div>
+                )
+            }
         </div>
+
     );
 };
 

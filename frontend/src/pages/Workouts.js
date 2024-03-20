@@ -35,7 +35,7 @@ const WorkoutHistory = ({ workouts }) => {
   return (
     <div className='workout-history-list'>
       {
-        workouts.map((workout, index) => {
+        workouts && workouts.map((workout, index) => {
           if (workout.completed_days.includes(today)) {
             return (
               <WorkoutHistoryBox
@@ -48,7 +48,7 @@ const WorkoutHistory = ({ workouts }) => {
         })
       }
       {
-        workouts.map((workout, index) => {
+        workouts && workouts.map((workout, index) => {
           if (workout.completed_days.includes(yesterdayDate)) {
             return (
               <WorkoutHistoryBox
