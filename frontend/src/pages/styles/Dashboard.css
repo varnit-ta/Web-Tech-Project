@@ -31,13 +31,21 @@
 
 .dashboard-left{
     flex: 1;
+    min-width: 400px;
 }
 .dashboard-right{
     flex: 1;
+    min-width: 400px;
 }
 
 .dashboard-workouts {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+@media screen and (max-width: 768px){
+    .dashboard-notification{
+        width: 300px;
+    }
 }

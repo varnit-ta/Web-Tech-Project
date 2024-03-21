@@ -12,7 +12,7 @@ const SelectionBar = ({ days, onDaySelect }) => {
     };
 
     return (
-        <div className="navbar">
+        <div className="selection-bar">
             {days.map((day, index) => (
                 <button
                     key={index}

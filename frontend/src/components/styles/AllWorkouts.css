@@ -1,18 +1,18 @@
-.navbar{
+.selection-bar{
     padding: 10px;
     border: 2px solid var(--primary);
     border-radius: 0.5em;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 5px
+    gap: 5px;
 }
-.navbar button, .active{
+.selection-bar button, .active{
     border: 0px;
     padding: 10px;
     transition: 0.2s ease-in-out;
 }
-.navbar .active{
+.selection-bar .active{
     background-color: var(--primary);
     color: white;
     border-radius: 0.25em;
@@ -53,4 +53,17 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+@media screen and (max-width: 768px){
+    .selection-bar{
+        flex-direction: column;
+        width: 80vw;
+    }
+    .selected-days-workout-box{
+        width: 75vw;
+    }
+    .selection-bar button{
+        width: 75vw;
+    }
 }

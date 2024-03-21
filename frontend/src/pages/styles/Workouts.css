@@ -1,5 +1,6 @@
 .workouts-page {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-between;
 }
@@ -42,10 +43,6 @@
     flex-direction: column;
     gap: 10px;
 }
-
-
-
-
 
 .navbar{
     padding: 10px;
@@ -101,4 +98,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@media screen and (max-width: 768px){
+    .workout-history-box{
+        width: 75vw;
+    }
 }

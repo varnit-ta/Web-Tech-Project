@@ -28,3 +28,18 @@ header .container {
     align-items: center;
     justify-content: space-between;
   }
+
+@media screen and (max-width: 768px){
+    header .container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    header h1{
+        margin: 2vh 0 0.5vh 0;
+    }
+
+    nav {
+        margin: 2vh;
+    }
+}

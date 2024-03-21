@@ -72,7 +72,6 @@ const ProgressWindow = () => {
 
     useEffect(() => {
         calculateToday();
-        console.log(yesterdayDate, todayDate, yesterdayTotalCalories, yesterdayDoneCalories, totalCalories, doneCalories)
     }, [workouts]);
 
     return (
